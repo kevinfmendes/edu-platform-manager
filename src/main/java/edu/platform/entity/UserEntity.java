@@ -7,11 +7,30 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "tb_users")
-public class UserEntity extends PanacheEntityBase {
+public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    public UUID userId;
+    private UUID userId;
 
-    public String name;
+    private String name;
+
+    private UserEntity() {
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public UUID getUserId() {
+        return userId;
+    }
+
+    public void setUserId(UUID userId) {
+        this.userId = userId;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }
