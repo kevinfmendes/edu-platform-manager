@@ -1,8 +1,8 @@
 package edu.platform.controller;
 
 import edu.platform.dtos.CredentialsDTO;
-import edu.platform.dtos.TokenResponseDTO;
 import edu.platform.service.AuthService;
+import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
@@ -15,11 +15,8 @@ import jakarta.ws.rs.core.Response;
 @Consumes(MediaType.APPLICATION_JSON)
 public class AuthController {
 
-    private final AuthService authService;
-
-    public AuthController(AuthService authService) {
-        this.authService = authService;
-    }
+    @Inject
+    AuthService authService;
 
     @Path("/login")
     @POST

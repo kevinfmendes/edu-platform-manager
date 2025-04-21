@@ -8,6 +8,9 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.core.Response;
 
+import java.util.HashMap;
+import java.util.Map;
+
 
 @ApplicationScoped
 public class AuthService {
@@ -17,7 +20,12 @@ public class AuthService {
 
     public Response login(CredentialsDTO credentials) {
         try {
-            Tokens tokens = oidcClient.getTokens().await().indefinitely();
+
+            Map<String, String> params = new HashMap<>();
+            params.put("username", credentials.username());
+            params.put("password", credentials.password());
+
+            Tokens tokens = oidcClient.getTokens(params).await().indefinitely();
 
             TokenResponseDTO tokenResponse = new TokenResponseDTO(
                     tokens.getAccessToken(),
@@ -28,7 +36,7 @@ public class AuthService {
             return Response.ok(tokenResponse).build();
 
         } catch (Exception e) {
-            return Response.status(Response.Status.UNAUTHORIZED).entity("Usuário ou senha inválidos").build();
+            return Response.status(Response.Status.UNAUTHORIZED).entity("error:" +e.getMessage()).build();
         }
     }
 
