@@ -1,6 +1,7 @@
 package edu.platform.controller;
 
 import edu.platform.dtos.CredentialsDTO;
+import edu.platform.dtos.RegistrationDTO;
 import edu.platform.service.AuthService;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
@@ -23,4 +24,11 @@ public class AuthController {
     public Response login(CredentialsDTO credentials) {
         return authService.login(credentials);
     }
+
+    @Path("/register")
+    @POST
+    public Response register(RegistrationDTO registration) {
+        return authService.register(registration);
+    }
+
 }

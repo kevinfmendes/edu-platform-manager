@@ -7,6 +7,7 @@ public class RegistrationDTO {
     private String password;
     private String firstName;
     private String lastName;
+    private Integer codigoRole;
 
     public RegistrationDTO() {
     }
@@ -19,9 +20,16 @@ public class RegistrationDTO {
         this.lastName = lastName;
     }
 
-    // Getters e setters
     public String getUsername() {
         return username;
+    }
+
+    public Integer getCodigoRole() {
+        return codigoRole;
+    }
+
+    public void setCodigoRole(Integer codigoRole) {
+        this.codigoRole = codigoRole;
     }
 
     public void setUsername(String username) {

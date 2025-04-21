@@ -9,4 +9,12 @@ import java.util.UUID;
 @ApplicationScoped
 public class UserRepository implements PanacheRepositoryBase<UserEntity, UUID> {
 
+    public boolean existsByEmail(String email) {
+        return find("email", email).firstResultOptional().isPresent();
+    }
+
+    public boolean existsByUsername(String username) {
+        return find("username", username).firstResultOptional().isPresent();
+    }
+
 }
