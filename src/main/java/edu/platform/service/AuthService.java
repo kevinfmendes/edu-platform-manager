@@ -78,8 +78,6 @@ public class AuthService {
         }
     }
 
-
-
     public Response login(CredentialsDTO credentials) {
         try {
 

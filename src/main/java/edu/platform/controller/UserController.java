@@ -24,7 +24,7 @@ public class UserController {
     }
 
     @GET
-    @RolesAllowed("USER")
+    @RolesAllowed("ADMIN")
     public Response findAllUsers(@QueryParam("page") @DefaultValue("0") Integer page,
                                  @QueryParam("pageSize") @DefaultValue("5") Integer pageSize) {
         var users = userService.findAllUsers(page, pageSize);
@@ -33,7 +33,7 @@ public class UserController {
 
     @Path("/{id}")
     @GET
-    @RolesAllowed("USER")
+    @RolesAllowed("ADMIN")
     public Response findUserById(@PathParam("id") UUID id) {
         return Response.ok(userService.findById(id)).build();
     }

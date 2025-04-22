@@ -1,0 +1,56 @@
+{
+  "realm": "app-quarkus-realm",
+  "enabled": true,
+  "roles": {
+    "realm": [
+      { "name": "ADMIN" },
+      { "name": "COORDENADOR" },
+      { "name": "PROFESSOR" },
+      { "name": "ALUNO" }
+    ]
+  },
+  "clients": [
+    {
+      "clientId": "app-quarkus",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": true,
+      "redirectUris": ["*"],
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": true,
+      "rootUrl": "http://localhost:8081"
+    }
+  ],
+  "users": [
+    {
+      "username": "admin_test",
+      "enabled": true,
+      "firstName": "Admin",
+      "lastName": "Test",
+      "email": "admin@teste.com",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "admin",
+          "temporary": false
+        }
+      ],
+      "realmRoles": ["ADMIN"]
+    },
+    {
+      "username": "aluno_test",
+      "enabled": true,
+      "firstName": "Aluno",
+      "lastName": "Test",
+      "email": "aluno@teste.com",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "aluno",
+          "temporary": false
+        }
+      ],
+      "realmRoles": ["ALUNO"]
+    }
+  ]
+}

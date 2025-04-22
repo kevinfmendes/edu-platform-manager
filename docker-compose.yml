@@ -1,0 +1,58 @@
+version: '3.9'
+
+services:
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: quarkusdb
+      MYSQL_USER: quarkus
+      MYSQL_PASSWORD: quarkus
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - quarkus-network
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.2.0
+    container_name: keycloak
+    command: start-dev --import-realm
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+      KC_DB: dev-mem
+    volumes:
+      - ./keycloak/realm-export.json:/opt/keycloak/data/import/realm-export.json
+    ports:
+      - "8080:8080"
+    networks:
+      - quarkus-network
+
+  quarkus-app:
+    build:
+      context: src/main/docker
+      dockerfile: Dockerfile
+    container_name: quarkus-app
+    depends_on:
+      - mysql
+      - keycloak
+    environment:
+      QUARKUS_DATASOURCE_JDBC_URL: jdbc:mysql://mysql:3306/quarkusdb
+      QUARKUS_DATASOURCE_USERNAME: quarkus
+      QUARKUS_DATASOURCE_PASSWORD: quarkus
+      QUARKUS_OIDC_AUTH_SERVER_URL: http://keycloak:8080/realms/app-quarkus-realm
+    ports:
+      - "8081:8081"
+    networks:
+      - quarkus-network
+
+volumes:
+  mysql_data:
+
+networks:
+  quarkus-network:
+    driver: bridge
