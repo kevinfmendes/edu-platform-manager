@@ -15,7 +15,7 @@
       "enabled": true,
       "protocol": "openid-connect",
       "publicClient": true,
-      "redirectUris": ["*"],
+      "redirectUris": ["http://localhost:8081/*", "http://quarkus-app:8081/*"],
       "standardFlowEnabled": true,
       "directAccessGrantsEnabled": true,
       "rootUrl": "http://localhost:8081"
@@ -52,6 +52,5 @@
       ],
       "realmRoles": ["ALUNO"]
     }
-  ],
-  "redirectUris": ["http://localhost:8081/*", "http://quarkus-app:8081/*"]
+  ]
 }
