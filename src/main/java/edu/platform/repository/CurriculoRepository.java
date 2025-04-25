@@ -9,16 +9,12 @@ import java.util.UUID;
 
 public class CurriculoRepository implements PanacheRepositoryBase<CurriculoEntity, UUID> {
 
-    public List<CurriculoEntity> findByCursoId(UUID cursoId){
-        return find("cursoId", cursoId).stream().toList();
-    };
-
-    public List<CurriculoEntity> findSemestreById(UUID semestreId){
-        return find("semestreId", semestreId).stream().toList();
+    public List<CurriculoEntity> findByCursoId(Long cursoId) {
+        return list("curso.id", cursoId);
     }
 
-    public List<CurriculoEntity> findByCursoIdAndSemestreId(UUID cursoId, UUID semestreId){
-        return find("cursoId, semestreId", cursoId, semestreId).stream().toList();
+    public List<CurriculoEntity> findByCursoAndSemestre(Long cursoId, Long semestreId) {
+        return list("curso.id = ?1 and semestre.id = ?2", cursoId, semestreId);
     }
 
 }

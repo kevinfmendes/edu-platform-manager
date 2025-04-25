@@ -7,24 +7,21 @@ import edu.platform.entity.UserEntity;
 import edu.platform.entity.enums.TipoUsuario;
 import edu.platform.repository.UserRepository;
 import io.quarkus.oidc.client.OidcClient;
-import io.quarkus.oidc.client.Tokens;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.resource.spi.ConfigProperty;
 import jakarta.ws.rs.WebApplicationException;
+import jakarta.ws.rs.client.ClientBuilder;
+import jakarta.ws.rs.client.Entity;
+import jakarta.ws.rs.core.Form;
 import jakarta.ws.rs.core.Response;
-import jdk.javadoc.doclet.Reporter;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.resource.UsersResource;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
-
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
 
 @ApplicationScoped
 public class AuthService {
@@ -80,23 +77,32 @@ public class AuthService {
 
     public Response login(CredentialsDTO credentials) {
         try {
+            var client = ClientBuilder.newClient();
 
-            Map<String, String> params = new HashMap<>();
-            params.put("username", credentials.username());
-            params.put("password", credentials.password());
+            // Monta o form para o body
+            var form = new Form();
+            form.param("client_id", "app-quarkus");
+            form.param("client_secret", "secret-key");
+            form.param("grant_type", "password");
+            form.param("username", credentials.username());
+            form.param("password", credentials.password());
 
-            Tokens tokens = oidcClient.getTokens(params).await().indefinitely();
+            // Faz a chamada HTTP
+            Response response = client.target("http://localhost:8080/realms/app-quarkus-realm/protocol/openid-connect/token")
+                    .request()
+                    .post(Entity.form(form));
 
-            TokenResponseDTO tokenResponse = new TokenResponseDTO(
-                    tokens.getAccessToken(),
-                    tokens.getRefreshToken(),
-                    tokens.getAccessTokenExpiresAt()
-            );
+            if (response.getStatus() != 200) {
+                return Response.status(Response.Status.UNAUTHORIZED).entity("Usuário ou senha inválidos").build();
+            }
+
+            var tokenResponse = response.readEntity(TokenResponseDTO.class);
 
             return Response.ok(tokenResponse).build();
 
         } catch (Exception e) {
-            return Response.status(Response.Status.UNAUTHORIZED).entity("error:" +e.getMessage()).build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Erro ao fazer login: " + e.getMessage()).build();
         }
     }
 

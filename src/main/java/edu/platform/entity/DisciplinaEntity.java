@@ -8,8 +8,8 @@ import java.util.UUID;
 @Table(name = "tb_disciplina")
 public class DisciplinaEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     private String codigo;
     private String nome;
@@ -21,11 +21,11 @@ public class DisciplinaEntity {
     private CursoEntity curso;
 
     // Getters e Setters
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
